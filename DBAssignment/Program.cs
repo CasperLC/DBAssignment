@@ -21,6 +21,10 @@ namespace DBAssignment
 
             //deleteDepartmentProcedure(ConnectionString, 9);
 
+            getDepartment(ConnectionString, 5);
+
+            GetAllDepartments(ConnectionString);
+
             Console.ReadLine();
         }
 
@@ -47,13 +51,13 @@ namespace DBAssignment
                     connection.Open();
                     cmd.ExecuteNonQuery();
 
-                    SqlDataReader reader2 = cmdAfter.ExecuteReader();
-                    while (reader2.Read())
+                    SqlDataReader reader = cmdAfter.ExecuteReader();
+                    while (reader.Read())
                     {
                         Console.WriteLine("{0}\t{1}",
-                            reader2[0], reader2[1]);
+                            reader[0], reader[1]);
                     }
-                    reader2.Close();
+                    reader.Close();
                 }
                 catch (Exception ex)
                 {
@@ -85,13 +89,13 @@ namespace DBAssignment
                     connection.Open();
                     cmd.ExecuteNonQuery();
 
-                    SqlDataReader reader2 = cmdAfter.ExecuteReader();
-                    while (reader2.Read())
+                    SqlDataReader reader = cmdAfter.ExecuteReader();
+                    while (reader.Read())
                     {
                         Console.WriteLine("{0}",
-                            reader2[0]);
+                            reader[0]);
                     }
-                    reader2.Close();
+                    reader.Close();
                 }
                 catch (Exception ex)
                 {
@@ -123,13 +127,13 @@ namespace DBAssignment
                     connection.Open();
                     cmd.ExecuteNonQuery();
 
-                    SqlDataReader reader2 = cmdAfter.ExecuteReader();
-                    while (reader2.Read())
+                    SqlDataReader reader = cmdAfter.ExecuteReader();
+                    while (reader.Read())
                     {
                         Console.WriteLine("{0}\t{1}",
-                             reader2[0], reader2[1]);
+                             reader[0], reader[1]);
                     }
-                    reader2.Close();
+                    reader.Close();
                 }
                 catch (Exception ex)
                 {
@@ -154,6 +158,67 @@ namespace DBAssignment
                     connection.Open();
                     var result = cmd.ExecuteNonQuery();
                     Console.WriteLine("Department number " + DNumber + " was deleted");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        private static void getDepartment(string ConnectionString, int DNumber)
+        {
+           using (SqlConnection connection =
+           new SqlConnection(ConnectionString))
+            {
+                // Creating SQL Commands
+                SqlCommand cmd = new SqlCommand("usp_GetDepartment", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@DNumber", SqlDbType.Int).Value = DNumber;
+
+                Console.WriteLine("\n\nStored Procedure: usp_GetDepartment(DNumber)");
+                //Each reader[x] reads 1 column, so it needs to be equal to the columns selected
+                try
+                {
+                    connection.Open();
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}",
+                            reader[0], reader[1], reader[2], reader[3], reader[4]);
+                    }
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        private static void GetAllDepartments(string ConnectionString)
+        {
+            using (SqlConnection connection =
+           new SqlConnection(ConnectionString))
+            {
+                // Creating SQL Commands
+                SqlCommand cmd = new SqlCommand("usp_GetAllDepartments", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                Console.WriteLine("\n\nStored Procedure: usp_GetAllDepartments");
+                //Each reader[x] reads 1 column, so it needs to be equal to the columns selected
+                try
+                {
+                    connection.Open();
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}",
+                            reader[0], reader[1], reader[2], reader[3], reader[4]);
+                    }
+                    reader.Close();
                 }
                 catch (Exception ex)
                 {
