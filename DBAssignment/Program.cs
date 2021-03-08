@@ -8,19 +8,19 @@ namespace DBAssignment
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("DB Compulsory Assignment");
 
             // Create a Connection Object
             string ConnectionString = "Integrated Security=SSPI;" + "Initial Catalog=Company;" + "Data Source = localhost;";
-            SqlConnection conn = new SqlConnection(ConnectionString);
-            conn.Open();
-            SqlCommand cmd = new SqlCommand("TestSP123", conn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.Add("@DepartmentNumber", SqlDbType.Int).Value = 5;
 
             using (SqlConnection connection =
             new SqlConnection(ConnectionString))
             {
+                SqlCommand cmd = new SqlCommand("TestSP123", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@DepartmentNumber", SqlDbType.Int).Value = 4;
+
+                Console.WriteLine("\n\nStored Procedure 1");
                 //Each reader[x] reads 1 column, so it needs to be equal to the columns selected
                 try
                 {
@@ -37,8 +37,9 @@ namespace DBAssignment
                 {
                     Console.WriteLine(ex.Message);
                 }
-                Console.ReadLine();
             }
+
+            Console.ReadLine();
         }
     }
 }
